@@ -25,13 +25,15 @@ urlpatterns = [
     path('doLogin',views.doLogin,name="do_login"),
     path('admin_home',HodViews.admin_home,name="admin_home"),
    
-    path('add_staff_save',HodViews.add_staff_save,name="add_staff_save"),
+    path('add_staff',HodViews.add_staff,name="add_staff"),
     
     path('add_course', HodViews.add_course_save,name="add_course"),
     
     path('add_student', HodViews.add_student_save,name="add_student"),
-   
+    
+    path('add_subject', HodViews.add_subject,name="add_subject"),
     path('add_subject_save', HodViews.add_subject_save,name="add_subject_save"),
+    
     path('manage_staff', HodViews.manage_staff,name="manage_staff"),
     path('manage_student', HodViews.manage_student,name="manage_student"),
     path('manage_course', HodViews.manage_course,name="manage_course"),
