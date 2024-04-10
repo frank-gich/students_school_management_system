@@ -106,7 +106,9 @@ def add_course(request):
 
 @login_required(login_url='show_login')
 def add_course_save(request):
-    if request.method=="POST":
+    if request.method!="POST":
+        return HttpResponse("Method Not Allowed")
+    else:
         course=request.POST.get("course")
         try:
             course_model=Courses(course_name=course)
@@ -119,10 +121,15 @@ def add_course_save(request):
             return HttpResponseRedirect(reverse("add_course"))
 
 @login_required(login_url='show_login')
-def add_student_save(request):
+def add_student(request):
     form=AddStudentForm()
-    
-    if request.method== "POST":
+    return render(request,"hod_template/add_student_template.html",{"form":form})
+
+@login_required(login_url='show_login')
+def add_student_save(request):
+    if request.method!="POST":
+        return HttpResponse("Method Not Allowed")
+    else:
         form=AddStudentForm(request.POST,request.FILES)
         if form.is_valid():
             first_name=form.cleaned_data["first_name"]
