@@ -549,70 +549,11 @@ def admin_profile_save(request):
             customuser=CustomUser.objects.get(id=request.user.id)
             customuser.first_name=first_name
             customuser.last_name=last_name
-            # if password!=None and password!="":
-            #     customuser.set_password(password)
+           
             customuser.save()
             messages.success(request, "Successfully Updated Profile")
             return HttpResponseRedirect(reverse("admin_profile"))
         except:
             messages.error(request, "Failed to Update Profile")
             return HttpResponseRedirect(reverse("admin_profile"))
-
-@login_required(login_url='show_login')
-def admin_send_notification_student(request):
-    students=Students.objects.all()
-    return render(request,"hod_template/student_notification.html",{"students":students})
-
-@login_required(login_url='show_login')
-def admin_send_notification_staff(request):
-    staffs=Staffs.objects.all()
-    return render(request,"hod_template/staff_notification.html",{"staffs":staffs})
-
-@login_required(login_url='show_login')
-@csrf_exempt
-def send_student_notification(request):
-    id=request.POST.get("id")
-    message=request.POST.get("message")
-    student=Students.objects.get(admin=id)
-    token=student.fcm_token
-    url="https://fcm.googleapis.com/fcm/send"
-    body={
-        "notification":{
-            "title":"Student Management System",
-            "body":message,
-            "click_action": "https://studentmanagementsystem22.herokuapp.com/student_all_notification",
-            "icon": "http://studentmanagementsystem22.herokuapp.com/static/dist/img/user2-160x160.jpg"
-        },
-        "to":token
-    }
-    headers={"Content-Type":"application/json","Authorization":"key=SERVER_KEY_HERE"}
-    data=requests.post(url,data=json.dumps(body),headers=headers)
-    notification=NotificationStudent(student_id=student,message=message)
-    notification.save()
-    print(data.text)
-    return HttpResponse("True")
-
-@login_required(login_url='show_login')
-@csrf_exempt
-def send_staff_notification(request):
-    id=request.POST.get("id")
-    message=request.POST.get("message")
-    staff=Staffs.objects.get(admin=id)
-    token=staff.fcm_token
-    url="https://fcm.googleapis.com/fcm/send"
-    body={
-        "notification":{
-            "title":"Student Management System",
-            "body":message,
-            "click_action":"https://studentmanagementsystem22.herokuapp.com/staff_all_notification",
-            "icon":"http://studentmanagementsystem22.herokuapp.com/static/dist/img/user2-160x160.jpg"
-        },
-        "to":token
-    }
-    headers={"Content-Type":"application/json","Authorization":"key=SERVER_KEY_HERE"}
-    data=requests.post(url,data=json.dumps(body),headers=headers)
-    notification=NotificationStaffs(staff_id=staff,message=message)
-    notification.save()
-    print(data.text)
-    return HttpResponse("True")
 
